@@ -37,7 +37,7 @@ class Generalization:
             generalized_rank[value[0]-1] = rank
         return generalized_rank
 
-    def get_sum_ranks(self, flag: bool=False):
+    def get_sum_ranks(self, flag: bool = False) -> np.array:
         """Метод для получения суммы рангов.
 
         Args:
