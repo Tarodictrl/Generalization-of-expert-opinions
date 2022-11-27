@@ -1,17 +1,15 @@
 import numpy as np
 import pandas as pd
-from scipy.stats import rankdata
 
 
 class Generalization:
-    def __init__(self, matrix: np.array, competence: np.array) -> None:
+    def __init__(self, matrix: np.array, **kwargs) -> None:
         """
         Args:
             matrix (np.array): Матрица мнения экспертов.
-            competence (np.array): Матрица компетентности экспертов.
         """
         self.matrix = matrix
-        self.competence = competence
+        self.competence = kwargs.get("competence")
 
     def get_generalized_rank(self, flag: bool = False) -> np.array:
         """Метод для получения рангов по методу обобщенного ранжирования.
@@ -57,30 +55,33 @@ class Generalization:
             sum_ranks.append(sum)
         return np.array(sum_ranks)
 
+    def get_paired_comparisons(self) -> np.array:
+        """Метод для получения матриц парных сравнений.
 
-if __name__ == "__main__":
-    matrix = np.array([
-        [1, 1, 6, 8, 10, 2, 6, 5, 1, 4],
-        [10, 8, 5, 5, 5, 4, 6, 6, 9, 8],
-        [2, 3, 9, 1, 5, 2, 10, 8, 6, 5],
-        [10, 9, 9, 3, 6, 1, 5, 4, 2, 2],
-        [5, 7, 8, 4, 7, 5, 9, 9, 3, 7]
-    ]
-    )
-    competence = np.array([.086921, .011919, .43016, .10141, .36959])
-    gen = Generalization(matrix, competence)
-    print("2. Обобщить мнения экспертов, полученные непосредственной оценкой по балльной шкале:")
-    print("а) без учёта компетентности экспертов, б) с учётом")
-    print("Матрица оценок экспертов:")
-    print(pd.DataFrame(matrix, index=[f"Эксперт {i}" for i in range(1, 6)],
-                       columns=[f"A{i}" for i in range(1, 11)]))
-    print("Компетентность экспертов:")
-    print(pd.DataFrame(competence))
-    print("Сумма рангов:")
-    print(gen.get_sum_ranks(False))
-    print("Обобщенные ранги:")
-    print(gen.get_generalized_rank(False))
-    print("Сумма рангов с учётом компетентности:")
-    print(gen.get_sum_ranks(True))
-    print("Обобщенные ранги с учётом компетентности:")
-    print(gen.get_generalized_rank(True))
+        Returns:
+            np.array: Матрица парных сравнений.
+        """
+        paired_comparisons = []
+        for i in range(len(self.matrix)):
+            comparison = np.zeros((len(self.matrix[0]), len(self.matrix[0])), dtype=int)
+            for j in range(len(self.matrix[0])):
+                for k in range(len(self.matrix[0])):
+                    if self.matrix[i][j] > self.matrix[i][k]:
+                        comparison[j][k] = 0
+                    elif self.matrix[i][j] <= self.matrix[i][k]:
+                        comparison[j][k] = 1
+            paired_comparisons.append(comparison)
+        return np.array(paired_comparisons)
+
+    def get_generalized_matrix_of_paired_comparisons(self, paired_comparisons: np.array):
+        comparison = np.zeros((len(self.matrix[0]), len(self.matrix[0])), dtype=int)
+        for j in range(len(self.matrix[0])):
+            for k in range(len(self.matrix[0])):
+                sum = 0
+                for i in range(len(self.matrix)):
+                    sum += paired_comparisons[i][j][k]
+                if sum > 2:
+                    comparison[j][k] = 1
+                else:
+                    comparison[j][k] = 0
+        return comparison
