@@ -73,7 +73,15 @@ class Generalization:
             paired_comparisons.append(comparison)
         return np.array(paired_comparisons)
 
-    def get_generalized_matrix_of_paired_comparisons(self, paired_comparisons: np.array):
+    def get_generalized_matrix_of_paired_comparisons(self, paired_comparisons: np.array) -> np.zeros:
+        """Метод для получения обобщенной матрицы парных сравнений.
+
+        Args:
+            paired_comparisons (np.array): Матрицы парных сравнений.
+
+        Returns:
+            np.zeros: Матрица обобщенных парных сравнений.
+        """
         comparison = np.zeros((len(self.matrix[0]), len(self.matrix[0])), dtype=int)
         for j in range(len(self.matrix[0])):
             for k in range(len(self.matrix[0])):
