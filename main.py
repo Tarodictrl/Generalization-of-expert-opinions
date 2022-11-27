@@ -5,10 +5,21 @@ from scipy.stats import rankdata
 
 class Generalization:
     def __init__(self, matrix: np.array, competence: np.array) -> None:
+        """
+        Args:
+            matrix (np.array): Матрица мнения экспертов.
+            competence (np.array): Матрица компетентности экспертов.
+        """
         self.matrix = matrix
         self.competence = competence
 
-    def get_generalized_rank(self, flag: bool) -> np.array:
+    def get_generalized_rank(self, flag: bool = False) -> np.array:
+        """Метод для получения рангов по методу обобщенного ранжирования.
+        Args:
+            flag (bool): Флаг для использования компетентности экспертов. По умолчанию False.
+        Returns:
+            np.array: Матрица обобщенных рангов.
+        """
         amount_rank = self.get_sum_ranks(flag)
         generalized_rank = [0]*len(amount_rank)
         d = {}
@@ -26,7 +37,15 @@ class Generalization:
             generalized_rank[value[0]-1] = rank
         return generalized_rank
 
-    def get_sum_ranks(self, flag=False):
+    def get_sum_ranks(self, flag: bool=False):
+        """Метод для получения суммы рангов.
+
+        Args:
+            flag (bool): Флаг для использования компетентности экспертов. По умолчанию False.
+
+        Returns:
+            np.array: Матрица сумм рангов.
+        """
         sum_ranks = []
         for i in range(len(self.matrix[0])):
             sum = 0
@@ -36,7 +55,7 @@ class Generalization:
                 else:
                     sum += self.matrix[j][i]
             sum_ranks.append(sum)
-        return sum_ranks
+        return np.array(sum_ranks)
 
 
 if __name__ == "__main__":
