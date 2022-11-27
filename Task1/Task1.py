@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(1, "./Module")
 from Generalization import Generalization
 import numpy as np
 import pandas as pd
