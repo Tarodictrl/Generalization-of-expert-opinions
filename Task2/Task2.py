@@ -1,8 +1,8 @@
 import sys
 sys.path.insert(1, "./Module")
-from Generalization import Generalization
-import numpy as np
 import pandas as pd
+import numpy as np
+from Generalization import Generalization
 
 if __name__ == "__main__":
     matrix = np.array([
@@ -22,7 +22,8 @@ if __name__ == "__main__":
                        columns=[f"A{i}" for i in range(1, 11)]))
     print()
     print("Компетентность экспертов:")
-    print(pd.DataFrame(competence, index=[f"Эксперт {i}" for i in range(1, 6)], columns=["Компетентность"]))
+    print(pd.DataFrame(competence, index=[
+          f"Эксперт {i}" for i in range(1, 6)], columns=["Компетентность"]))
     print()
     print("Сумма рангов без учёта компетентности экспертов:")
     print(gen.get_sum_ranks(False))
@@ -35,4 +36,3 @@ if __name__ == "__main__":
     print()
     print("Обобщенные ранги с учётом компетентности:")
     print(gen.get_generalized_rank(True))
-    

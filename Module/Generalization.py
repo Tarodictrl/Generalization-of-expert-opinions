@@ -14,7 +14,8 @@ class Generalization:
     def get_generalized_rank(self, flag: bool = False) -> np.array:
         """Метод для получения рангов по методу обобщенного ранжирования.
         Args:
-            flag (bool): Флаг для использования компетентности экспертов. По умолчанию False.
+            flag (bool): Флаг для использования компетентности экспертов. 
+            По умолчанию False.
         Returns:
             np.array: Матрица обобщенных рангов.
         """
@@ -39,7 +40,8 @@ class Generalization:
         """Метод для получения суммы рангов.
 
         Args:
-            flag (bool): Флаг для использования компетентности экспертов. По умолчанию False.
+            flag (bool): Флаг для использования компетентности экспертов. 
+            По умолчанию False.
 
         Returns:
             np.array: Матрица сумм рангов.
@@ -63,7 +65,8 @@ class Generalization:
         """
         paired_comparisons = []
         for i in range(len(self.matrix)):
-            comparison = np.zeros((len(self.matrix[0]), len(self.matrix[0])), dtype=int)
+            comparison = np.zeros(
+                (len(self.matrix[0]), len(self.matrix[0])), dtype=int)
             for j in range(len(self.matrix[0])):
                 for k in range(len(self.matrix[0])):
                     if self.matrix[i][j] > self.matrix[i][k]:
@@ -82,7 +85,8 @@ class Generalization:
         Returns:
             np.zeros: Матрица обобщенных парных сравнений.
         """
-        comparison = np.zeros((len(self.matrix[0]), len(self.matrix[0])), dtype=int)
+        comparison = np.zeros(
+            (len(self.matrix[0]), len(self.matrix[0])), dtype=int)
         for j in range(len(self.matrix[0])):
             for k in range(len(self.matrix[0])):
                 sum = 0
@@ -93,3 +97,62 @@ class Generalization:
                 else:
                     comparison[j][k] = 0
         return comparison
+
+    def get_min_max_arrays(self) -> tuple:
+        """Метод для получения массивов максимальных и минимальных рангов.
+
+        Returns:
+            tuple: Массивы максимальных и минимальных рангов.
+        """
+        dt = pd.DataFrame(self.matrix)
+        min_array = []
+        max_array = []
+        for i in range(len(dt.columns)):
+            min_array.append(dt[i].min())
+            max_array.append(dt[i].max())
+        return min_array, max_array
+
+    def get_normalized_matrix(self) -> np.array:
+        """Метод для получения нормализованной матрицы.
+
+        Returns:
+            np.array: Нормализованная матрица.
+        """
+        matrix = np.zeros((len(self.matrix), len(self.matrix[0])))
+        min_array, max_array = self.get_min_max_arrays()
+        for i in range(len(self.matrix[0])):
+            for j in range(len(self.matrix)):
+                if i % 2 == 0:
+                    matrix[j][i] = (max_array[i] - self.matrix[j][i]) / (max_array[i] - min_array[i])
+                else:
+                    matrix[j][i] = self.matrix[j][i] / max_array[i]
+        return np.array(matrix)
+
+    def get_additive_convolution(self, normalized_matrix: np.array, method: 
+                                str = "equivalent", **kwargs) -> np.array:
+        """Метод для получения матрицы суммарной свертки.
+
+        Args:
+            normalized_matrix (np.array): Нормализованная матрица.
+            method (str, optional): Метод для получения матрицы суммарной свертки. По умолчанию "equivalent".
+        Raises:
+            ValueError: Если метод не найден.
+
+        Returns:
+            np.array: Матрица суммарной свертки.
+        """
+        if method not in ["equivalent", "specified"]:
+            raise ValueError("Неверный метод!")
+        convolution = []
+        if method == "equivalent":
+            for i in range(len(self.matrix)):
+                print(normalized_matrix[i])
+                convolution.append(sum(normalized_matrix[i])/len(normalized_matrix[i]))
+        elif method == "specified":
+            weights = kwargs.get("weights")
+            for i in range(len(self.matrix)):
+                sums = 0
+                for j in range(len(self.matrix[0])):
+                    sums += normalized_matrix[i][j] * weights[j]
+                convolution.append(sums)
+        return np.array(convolution)
