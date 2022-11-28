@@ -123,13 +123,14 @@ class Generalization:
         for i in range(len(self.matrix[0])):
             for j in range(len(self.matrix)):
                 if i % 2 == 0:
-                    matrix[j][i] = (max_array[i] - self.matrix[j][i]) / (max_array[i] - min_array[i])
+                    matrix[j][i] = (max_array[i] - self.matrix[j]
+                                    [i]) / (max_array[i] - min_array[i])
                 else:
                     matrix[j][i] = self.matrix[j][i] / max_array[i]
         return np.array(matrix)
 
-    def get_additive_convolution(self, normalized_matrix: np.array, method: 
-                                str = "equivalent", **kwargs) -> np.array:
+    def get_additive_convolution(self, normalized_matrix: np.array,
+                                 method: str = "equivalent", **kwargs) -> np.array:
         """Метод для получения матрицы суммарной свертки.
 
         Args:
@@ -147,12 +148,28 @@ class Generalization:
         if method == "equivalent":
             for i in range(len(self.matrix)):
                 print(normalized_matrix[i])
-                convolution.append(sum(normalized_matrix[i])/len(normalized_matrix[i]))
+                convolution.append(
+                    sum(normalized_matrix[i])/len(normalized_matrix[i]))
         elif method == "specified":
             weights = kwargs.get("weights")
             for i in range(len(self.matrix)):
                 sums = 0
                 for j in range(len(self.matrix[0])):
                     sums += normalized_matrix[i][j] * weights[j]
+                convolution.append(sums)
+        return np.array(convolution)
+
+    def get_multiplicative_convolution(self, normalized_matrix: np.array, method: str="equivalent", **kwargs):
+        if method not in ["equivalent", "specified"]:
+            raise ValueError("Неверный метод!")
+        convolution = []
+        if method == "equivalent":
+            for i in range(len(self.matrix)):
+                convolution.append(np.prod(normalized_matrix[i])**(1/len(normalized_matrix[i])))
+        elif method == "specified":
+            for i in range(len(self.matrix)):
+                sums = 1
+                for j in range(len(self.matrix[0])):
+                    sums *= normalized_matrix[i][j] ** kwargs.get("weights")[j]
                 convolution.append(sums)
         return np.array(convolution)
