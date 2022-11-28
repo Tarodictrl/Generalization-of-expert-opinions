@@ -69,9 +69,9 @@ class Generalization:
                 (len(self.matrix[0]), len(self.matrix[0])), dtype=int)
             for j in range(len(self.matrix[0])):
                 for k in range(len(self.matrix[0])):
-                    if self.matrix[i][j] > self.matrix[i][k]:
+                    if self.matrix[i][j] < self.matrix[i][k]:
                         comparison[j][k] = 0
-                    elif self.matrix[i][j] <= self.matrix[i][k]:
+                    elif self.matrix[i][j] >= self.matrix[i][k]:
                         comparison[j][k] = 1
             paired_comparisons.append(comparison)
         return np.array(paired_comparisons)
