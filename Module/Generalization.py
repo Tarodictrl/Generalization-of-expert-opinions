@@ -159,13 +159,27 @@ class Generalization:
                 convolution.append(sums)
         return np.array(convolution)
 
-    def get_multiplicative_convolution(self, normalized_matrix: np.array, method: str="equivalent", **kwargs):
+    def get_multiplicative_convolution(self, normalized_matrix: np.array,
+                                       method: str = "equivalent", **kwargs) -> np.array:
+        """Метод для получения матрицы мультипликативной свертки.
+
+        Args:
+            normalized_matrix (np.array): Нормализованная матрица.
+            method (str, optional): Метод для получения матрицы мультипликативной свертки. По умолчанию "equivalent".
+
+        Raises:
+            ValueError: Если метод не найден.
+
+        Returns:
+            np.array: Матрица мультипликативной свертки.
+        """
         if method not in ["equivalent", "specified"]:
             raise ValueError("Неверный метод!")
         convolution = []
         if method == "equivalent":
             for i in range(len(self.matrix)):
-                convolution.append(np.prod(normalized_matrix[i])**(1/len(normalized_matrix[i])))
+                convolution.append(
+                    np.prod(normalized_matrix[i])**(1/len(normalized_matrix[i])))
         elif method == "specified":
             for i in range(len(self.matrix)):
                 sums = 1
@@ -173,3 +187,23 @@ class Generalization:
                     sums *= normalized_matrix[i][j] ** kwargs.get("weights")[j]
                 convolution.append(sums)
         return np.array(convolution)
+
+    def get_perfect_point(self, normalized_matrix: np.array, 
+                          method: str = "equivalent", **kwargs) -> np.array:
+        if method not in ["equivalent", "specified"]:
+            raise ValueError("Неверный метод!")
+        perfect_point = []
+        if method == "equivalent":
+            for i in range(len(self.matrix)):
+                sum = 0
+                for j in range(len(self.matrix[0])):
+                    sum += (1 - normalized_matrix[i][j])**2
+                perfect_point.append(sum/len(self.matrix[0]))
+        elif method == "specified":
+            weights = kwargs.get("weights")
+            for i in range(len(self.matrix)):
+                sum = 0
+                for j in range(len(self.matrix[0])):
+                    sum += weights[j] * (1 - normalized_matrix[i][j])**2
+                perfect_point.append(sum)
+        return np.array(perfect_point)
