@@ -22,14 +22,23 @@ if __name__ == "__main__":
     additive_convolution_2 = gen.get_additive_convolution(normalized_matrix, 
                                                           method="specified", 
                                                           weights=weights)
+    additive_convolution_1_weights = gen.get_criterion_weight(additive_convolution_1)
+    additive_convolution_2_weights = gen.get_criterion_weight(additive_convolution_2)
+     
     multiplicative_convolution_1 = gen.get_multiplicative_convolution(normalized_matrix)
     multiplicative_convolution_2 = gen.get_multiplicative_convolution(normalized_matrix, 
                                                                       method="specified", 
                                                                       weights=weights)
+    multiplicative_convolution_1_weights = gen.get_criterion_weight(multiplicative_convolution_1)
+    multiplicative_convolution_2_weights = gen.get_criterion_weight(multiplicative_convolution_2)
+    
     perfect_point_1 = gen.get_perfect_point(normalized_matrix)
     perfect_point_2 = gen.get_perfect_point(normalized_matrix, 
                                             method="specified", 
                                             weights=weights)
+    perfect_point_1_weights = gen.get_criterion_weight(perfect_point_1)
+    perfect_point_2_weights = gen.get_criterion_weight(perfect_point_2)
+    
     print("Матрица провайдеров:")
     print(pd.DataFrame(matrix, index=[f"A{i}" for i in range(1, 6)], columns=columns))
     print("Веса:")
@@ -44,42 +53,38 @@ if __name__ == "__main__":
                        columns=columns))
     print()
     print("Аддитивная свертка (критерии равнозначны)")
-    print(pd.DataFrame(additive_convolution_1, 
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка"]))
-    print("Вес критерия:")
-    print(gen.get_criterion_weight(additive_convolution_1)[1])
+    print(pd.DataFrame(zip(additive_convolution_1, additive_convolution_1_weights[1]), 
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
     print("Наиболее предпочтительней является:")
-    print(gen.get_criterion_weight(additive_convolution_1)[0])
+    print(additive_convolution_1_weights[0])
+    print()
     print("Аддитивная свертка (веса критериев заданы)")
-    print(pd.DataFrame(additive_convolution_2, 
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка"]))
-    print("Вес критерия:")
-    print(gen.get_criterion_weight(additive_convolution_2)[1])
+    print(pd.DataFrame(zip(additive_convolution_2, additive_convolution_2_weights[1]),
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
     print("Наиболее предпочтительней является:")
-    print(gen.get_criterion_weight(additive_convolution_2)[0])
-    print("Мультипликативная свертка (критерии равнозначны)")
-    print(pd.DataFrame(multiplicative_convolution_1, 
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка"]))
-    print("Вес критерия:")
-    print(gen.get_criterion_weight(multiplicative_convolution_1)[1])
+    print(additive_convolution_2_weights[0])
+    print()
+    print("Мультипликативная свертка частных критериев (критерии равнозначны)")
+    print(pd.DataFrame(zip(multiplicative_convolution_1, multiplicative_convolution_1_weights[1]),
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
     print("Наиболее предпочтительней является:")
-    print(gen.get_criterion_weight(multiplicative_convolution_1)[0])
-    print("Мультипликативная свертка (веса критериев заданы)")
-    print(pd.DataFrame(multiplicative_convolution_2,
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка"]))
-    print("Вес критерия:")
-    print(gen.get_criterion_weight(multiplicative_convolution_2)[1])
+    print(multiplicative_convolution_1_weights[0])
+    print()
+    print("Мультипликативная свертка частных критериев (веса критериев заданы)")
+    print(pd.DataFrame(zip(multiplicative_convolution_2, multiplicative_convolution_2_weights[1]),
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
+    print("Наиболее предпочтительней является:")
+    print(multiplicative_convolution_2_weights[0])
+    print()
     print("Метод идеальной точки (критерии равнозначны)")
-    print(pd.DataFrame(perfect_point_1, 
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка"]))
-    print("Вес критерия:")
-    print(gen.get_criterion_weight(perfect_point_1)[1])
+    print(pd.DataFrame(zip(perfect_point_1, perfect_point_1_weights[1]),
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
     print("Наиболее предпочтительней является:")
-    print(gen.get_criterion_weight(perfect_point_1)[0])
+    print(perfect_point_1_weights[0])
+    print()
     print("Метод идеальной точки (веса критериев заданы)")
-    print(pd.DataFrame(perfect_point_2, 
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка"]))
-    print("Вес критерия:")
-    print(gen.get_criterion_weight(perfect_point_2)[1])
+    print(pd.DataFrame(zip(perfect_point_2, perfect_point_2_weights[1]),
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
     print("Наиболее предпочтительней является:")
-    print(gen.get_criterion_weight(perfect_point_2)[0])
+    print(perfect_point_2_weights[0])
+    
