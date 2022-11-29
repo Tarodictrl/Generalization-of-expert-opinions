@@ -18,7 +18,8 @@ if __name__ == "__main__":
     print("2. Обобщить мнения экспертов, полученные непосредственной оценкой по балльной шкале:")
     print("а) без учёта компетентности экспертов, б) с учётом")
     print("Матрица оценок экспертов:")
-    print(pd.DataFrame(matrix, index=[f"Эксперт {i}" for i in range(1, 6)],
+    print(pd.DataFrame(matrix, 
+                       index=[f"Эксперт {i}" for i in range(1, 6)],
                        columns=[f"A{i}" for i in range(1, 11)]))
     print()
     print("Компетентность экспертов:")
@@ -29,10 +30,10 @@ if __name__ == "__main__":
     print(gen.get_sum_ranks(False))
     print()
     print("Обобщенные ранги без учёта компетентности экспертов:")
-    print(gen.get_generalized_rank(False))
+    print(gen.get_generalized_rank(False)[1])
     print()
     print("Сумма рангов с учётом компетентности:")
     print(gen.get_sum_ranks(True))
     print()
     print("Обобщенные ранги с учётом компетентности:")
-    print(gen.get_generalized_rank(True))
+    print(gen.get_generalized_rank(True)[1])

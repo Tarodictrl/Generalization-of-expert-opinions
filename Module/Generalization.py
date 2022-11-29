@@ -34,7 +34,7 @@ class Generalization:
                     count += 1
             rank /= count
             generalized_rank[value[0]-1] = rank
-        return generalized_rank
+        return d[0], generalized_rank
 
     def get_sum_ranks(self, flag: bool = False) -> np.array:
         """Метод для получения суммы рангов.
@@ -147,7 +147,6 @@ class Generalization:
         convolution = []
         if method == "equivalent":
             for i in range(len(self.matrix)):
-                print(normalized_matrix[i])
                 convolution.append(
                     sum(normalized_matrix[i])/len(normalized_matrix[i]))
         elif method == "specified":
@@ -188,8 +187,19 @@ class Generalization:
                 convolution.append(sums)
         return np.array(convolution)
 
-    def get_perfect_point(self, normalized_matrix: np.array, 
+    def get_perfect_point(self, normalized_matrix: np.array,
                           method: str = "equivalent", **kwargs) -> np.array:
+        """Метод для получения идеальной точки.
+
+        Args:
+            normalized_matrix (np.array): Нормализованная матрица.
+            method (str, optional): Метод для получения идеальной точки. По умолчанию "equivalent".
+        Raises:
+            ValueError: Если метод не найден.
+
+        Returns:
+            np.array: Идеальная точка.
+        """
         if method not in ["equivalent", "specified"]:
             raise ValueError("Неверный метод!")
         perfect_point = []
@@ -207,3 +217,21 @@ class Generalization:
                     sum += weights[j] * (1 - normalized_matrix[i][j])**2
                 perfect_point.append(sum)
         return np.array(perfect_point)
+
+    def get_criterion_weight(self, criterion: np.arange) -> tuple:
+        """Метод для получения веса критерия.
+
+        Args:
+            criterion (np.arange): Критерий.
+
+        Returns:
+            tuple: Науличный выбор, вес критерия.
+        """
+        d = {}
+        weights = [0]*len(criterion)
+        for i in range(len(criterion)):
+            d[i+1] = criterion[i]
+        d = sorted(d.items(), key=lambda x: x[1])
+        for i, w in enumerate(d, start=1):
+            weights[w[0]-1] = i
+        return f"A{d[0][0]}", weights
