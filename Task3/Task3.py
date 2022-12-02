@@ -54,37 +54,37 @@ if __name__ == "__main__":
     print()
     print("Аддитивная свертка (критерии равнозначны)")
     print(pd.DataFrame(zip(additive_convolution_1, additive_convolution_1_weights[1]), 
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Веса критерия"]))
     print("Наиболее предпочтительней является:")
     print(additive_convolution_1_weights[0])
     print()
     print("Аддитивная свертка (веса критериев заданы)")
     print(pd.DataFrame(zip(additive_convolution_2, additive_convolution_2_weights[1]),
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Веса критерия"]))
     print("Наиболее предпочтительней является:")
     print(additive_convolution_2_weights[0])
     print()
     print("Мультипликативная свертка частных критериев (критерии равнозначны)")
     print(pd.DataFrame(zip(multiplicative_convolution_1, multiplicative_convolution_1_weights[1]),
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Веса критерия"]))
     print("Наиболее предпочтительней является:")
     print(multiplicative_convolution_1_weights[0])
     print()
     print("Мультипликативная свертка частных критериев (веса критериев заданы)")
     print(pd.DataFrame(zip(multiplicative_convolution_2, multiplicative_convolution_2_weights[1]),
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Веса критерия"]))
     print("Наиболее предпочтительней является:")
     print(multiplicative_convolution_2_weights[0])
     print()
     print("Метод идеальной точки (критерии равнозначны)")
     print(pd.DataFrame(zip(perfect_point_1, perfect_point_1_weights[1]),
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Веса критерия"]))
     print("Наиболее предпочтительней является:")
     print(perfect_point_1_weights[0])
     print()
     print("Метод идеальной точки (веса критериев заданы)")
     print(pd.DataFrame(zip(perfect_point_2, perfect_point_2_weights[1]),
-                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Вес критерия"]))
+                       index=[f"A{i}" for i in range(1, 6)], columns=["Свертка", "Веса критерия"]))
     print("Наиболее предпочтительней является:")
     print(perfect_point_2_weights[0])
     
